@@ -1,5 +1,5 @@
 # DOCIA
-Sistema web para análisis y consulta inteligente de documentos mediante IA. 
+Sistema para análisis y búsqueda inteligente de documentos mediante IA utilizando búsqueda semántica y recuperación de información (RAG).
 
 ## 🚀 Funcionalidades
 - Carga y procesamiento de documentos PDF con texto embebido
