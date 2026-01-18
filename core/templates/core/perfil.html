@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}DOCIA · Mi perfil{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado -->
+<div class="docia-section-header">
+  <h3>Mi perfil</h3>
+  <p>
+    Información personal y actividad reciente en el sistema.
+  </p>
+</div>
+
+<div class="row">
+
+  <!-- Columna izquierda: perfil -->
+  <div class="col-lg-4 mb-4">
+    <div class="card docia-doc-card h-100">
+      <div class="card-body text-center">
+
+        <i class="bi bi-person-circle" style="font-size: 5rem; color: #454545ff;"></i>
+
+        <h5 class="mb-1">
+          {{ usuario.titulo|default_if_none:"" }}
+          {{ usuario.first_name|default_if_none:"" }}
+          {{ usuario.last_name|default_if_none:"" }}
+        </h5>
+
+        <p class="text-muted mb-3">
+          C.I.: {{ usuario.username|default_if_none:"—" }}<br>
+          {{ usuario.dependencia|default_if_none:"—" }}
+        </p>
+
+        <div class="docia-divider my-3"></div>
+
+        <a href="{% url 'password_change' %}"
+           class="docia-link docia-primary">
+          <i class="bi bi-key"></i>
+          <span>Cambiar contraseña</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna derecha: actividad -->
+  <div class="col-lg-8 mb-4">
+    <div class="card docia-doc-card h-100">
+      <div class="card-body">
+
+        <h6 class="mb-3">Actividad reciente</h6>
+
+        {% if ultimas_acciones %}
+
+          <div class="docia-actividad-list">
+
+            {% for accion in ultimas_acciones %}
+              <div class="docia-actividad-item">
+
+                <div class="docia-actividad-header">
+                  <strong>{{ accion.get_accion_display }}</strong>
+                  <span class="docia-actividad-fecha">
+                    {{ accion.fecha|date:"d/m/Y H:i" }}
+                  </span>
+                </div>
+
+                <div class="docia-actividad-desc">
+                  {{ accion.descripcion|default_if_none:"Sin descripción" }}
+                </div>
+
+              </div>
+            {% endfor %}
+
+          </div>
+
+          <!-- Paginación -->
+          <nav class="mt-4">
+            <ul class="pagination justify-content-center mb-0">
+
+              {% if page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page=1">&laquo;</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+              {% endif %}
+
+              <li class="page-item disabled">
+                <span class="page-link">
+                  Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                </span>
+              </li>
+
+              {% if page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">&raquo;</a>
+                </li>
+              {% endif %}
+
+            </ul>
+          </nav>
+
+        {% else %}
+          <p class="text-muted mb-0">
+            No se registran acciones recientes.
+          </p>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

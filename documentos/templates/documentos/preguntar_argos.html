@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load mytemplatetags %}
+
+{% block titulo %}DOCIA · Consulta documental{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado DOCIA -->
+<div class="docia-section-header">
+  <h3>Consulta IA</h3>
+  <p>
+    Realice consultas en lenguaje natural sobre la documentación disponible.
+  </p>
+</div>
+
+<!-- Barra superior -->
+<div class="row mb-4 align-items-center">
+  <div class="col-md-12 mb-2">
+
+
+    <a href="javascript:history.back()"
+       class="docia-link">
+      <i class="bi bi-arrow-left"></i>
+       <span>Volver</span>
+      
+    </a>
+
+    <div class="docia-divider my-3"></div>
+
+
+  </div>
+  
+</div>
+
+<!-- Contenedor principal -->
+<div class="row justify-content-center">
+  <div class="col-xl-10 col-lg-11">
+
+    <div class="card docia-consulta-card">
+
+      <!-- Formulario -->
+      <form id="form-pregunta"
+            method="get"
+            action="{% url 'preguntar_argos' %}"
+            class="docia-consulta-form" data-ajax="true">
+
+     <label for="pregunta" class="form-label fw-semibold">
+  Consulta
+</label>
+
+<div class="docia-ia-box" id="ia-box">
+  <textarea
+    id="pregunta"
+    name="prompt"
+    class="form-control docia-textarea-ia"
+    rows="4"
+    placeholder="Ejemplo: ¿Qué documentos mencionan contratos vigentes con proveedores externos?"
+    required></textarea>
+</div>
+
+
+        <div class="mt-3 d-flex gap-3 align-items-center">
+  <button type="submit" class="btn btn-primary">
+    <i class="bi bi-chat-dots me-2"></i>
+    Consultar
+  </button>
+</div>
+
+      </form>
+
+      <hr class="my-4">
+
+      <!-- Estado -->
+      <div id="procesando" class="docia-loading mt-4" style="display:none;">
+  <div class="alert alert-info d-flex align-items-center gap-2">
+    <span class="spinner-border spinner-border-sm"></span>
+    Analizando documentación…
+  </div>
+</div>
+
+      <!-- Respuesta -->
+      <section aria-label="Resultado de la consulta">
+  <div id="respuesta" class="docia-respuesta-wrapper" style="display:none;"></div>
+  <div id="fragmentos" class="docia-fragmentos" style="display:none;">
+    <h6>Fragmentos relevantes</h6>
+    <div id="lista-fragmentos"></div>
+  </div>
+</section>
+
+    </div>
+
+  </div>
+</div>
+
+<script>
+document.getElementById('form-pregunta').addEventListener('submit', function (e) {
+  e.preventDefault()
+
+  const pregunta = document.getElementById('pregunta').value
+  const url = this.getAttribute('action') + '?prompt=' + encodeURIComponent(pregunta)
+
+  document.getElementById('procesando').style.display = 'block'
+  document.getElementById('respuesta').style.display = 'none'
+  document.getElementById('fragmentos').style.display = 'none'
+  document.getElementById('respuesta').innerHTML = ''
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById('procesando').style.display = 'none'
+
+      let html = `
+  <div class="docia-respuesta">
+    <h6 class="mb-2">Respuesta</h6>
+    <div class="docia-respuesta-texto">
+      ${data.respuesta}
+    </div>
+  </div>
+`
+
+      if (data.fragmento_usado) {
+        html += `
+          <div class="docia-fuente">
+            <strong>Fuente utilizada:</strong><br>
+            ${data.fragmento_usado.asunto || 'Sin asunto'}<br>
+            <em>${data.fragmento_usado.preview}</em><br>
+            ${data.fragmento_usado.url ? `
+              <a href="${data.fragmento_usado.url}"
+                 target="_blank"
+                 class="btn btn-sm btn-outline-primary mt-2">
+                Ver documento
+              </a>` : ''}
+          </div>
+        `
+      }
+
+      document.getElementById('respuesta').innerHTML = html
+      document.getElementById('respuesta').style.display = 'block'
+
+      if (data.fragmentos && data.fragmentos.length > 0) {
+        const lista = document.getElementById('lista-fragmentos')
+        lista.innerHTML = ''
+
+        data.fragmentos.forEach(frag => {
+          const div = document.createElement('div')
+          div.className = 'docia-fragmento'
+
+          div.innerHTML = `
+            <p>${frag.preview}</p>
+            <small>
+              Documento: ${frag.asunto || 'Sin asunto'}
+            </small><br>
+            ${frag.url ? `
+              <a href="${frag.url}"
+                 target="_blank"
+                 class="btn btn-sm btn-outline-secondary mt-2">
+                Ver documento
+              </a>` : ''}
+          `
+          lista.appendChild(div)
+        })
+
+        document.getElementById('fragmentos').style.display = 'block'
+      }
+    })
+    .catch(() => {
+      document.getElementById('procesando').style.display = 'none'
+      document.getElementById('respuesta').style.display = 'block'
+      document.getElementById('respuesta').innerHTML = `
+        <div class="alert alert-danger">
+          Error al procesar la consulta.
+        </div>
+      `
+    })
+})
+</script>
+
+{% endblock %}

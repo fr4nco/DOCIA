@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load mytemplatetags %}
+
+{% block titulo %}DOCIA · Documentos{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado DOCIA -->
+<div class="docia-section-header">
+  <h3>Documentos</h3>
+  <p>
+    Acceso centralizado a la documentación disponible para consulta y análisis.
+  </p>
+</div>
+
+<!-- Barra de acciones -->
+<div class="row mb-4 align-items-center">
+  <div class="col-md-12 mb-2">
+
+     <a href="javascript:history.back()"
+       class="docia-link">
+      <i class="bi bi-arrow-left"></i>
+       <span>Volver</span>
+      
+    </a>
+
+
+
+    <a href="#"
+        class=" docia-link"
+        data-bs-toggle="modal"
+        data-bs-target="#modalFiltros">
+  <i class="bi bi-funnel"></i>
+  <span>Filtrar</span>
+</a>
+
+
+    {% if perms.documentos.add_documento %}
+      <a href="{% url 'crear_documento' %}"
+         class="docia-link docia-primary">
+        <i class="bi bi-file-earmark-plus"></i>
+        <span>Nuevo</span>
+      </a>
+      {% endif %}
+
+
+   
+
+    <div class="docia-divider my-3"></div>
+
+
+  </div>
+  
+</div>
+
+<!-- Modal filtros -->
+<div class="modal fade"
+     id="modalFiltros"
+     tabindex="-1"
+     aria-hidden="true">
+
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Filtrar documentos</h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Cerrar"></button>
+      </div>
+
+      <form method="GET">
+        <div class="modal-body">
+          <div class="row">
+
+            <div class="col-12 mb-3">
+              <label class="form-label">{{ filtro.form.q.label }}</label>
+              {{ filtro.form.q }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">{{ filtro.form.dependencia.label }}</label>
+              {{ filtro.form.dependencia }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">{{ filtro.form.tipo_doc.label }}</label>
+              {{ filtro.form.tipo_doc }}
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Rango de fechas</label>
+              {{ filtro.form.fecha_informe }}
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-outline-secondary" type="button"
+                class="btn-close"
+                  data-bs-dismiss="modal">
+            Cancelar
+          </button>
+          <button class="btn btn-primary"
+                  type="submit">
+            Aplicar filtros
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+{% csrf_token %}
+
+<!-- Listado de documentos -->
+<div class="row">
+
+
+  <!-- Buscador global -->
+  <div class="docia-search container mb-3">
+    <form method="GET" class="d-flex justify-content-center">
+      <div class="input-group input-group-sm docia-search-group">
+
+        <input
+          type="text"
+          name="q"
+          value="{{ request.GET.q }}"
+          class="form-control"
+          placeholder="Buscar documentos…"
+          aria-label="Buscar">
+
+        <button class="btn btn-primary" type="submit">
+          <i class="bi bi-chat-dots"></i>
+        </button>
+
+      </div>
+    </form>
+  </div>  
+
+  {% for docu in objetos %}
+  <div class="col-xl-4 col-md-6 mb-4">
+    <div class="card h-100 docia-doc-card">
+
+      <div class="card-header">
+        {{ docu.fecha_informe|date:'d/m/Y' }}
+        · {{ docu.tipo_doc|default:'Sin tipo' }}
+      </div>
+
+      <div class="card-body">
+        <h6>
+          <a href="{% url 'ver_documento' docu.id %}">
+            {{ docu.asunto|default:'Documento sin asunto' }}
+          </a>
+        </h6>
+
+        {% if docu.dependencia %}
+          <small>
+            Área: {{ docu.dependencia }}
+          </small>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center text-muted py-4">
+    No se encontraron documentos con los criterios seleccionados.
+  </div>
+  {% endfor %}
+
+</div>
+
+<!-- Paginación -->
+<div class="row mt-3 align-items-center">
+  <div class="col-md-6 text-muted">
+    Página {{ objetos.number }} de {{ objetos.paginator.num_pages }} ·
+    {{ filtro.qs.count }} documentos
+  </div>
+
+  <div class="col-md-6">
+    <nav class="pagination justify-content-md-end mb-0">
+
+      {% if objetos.has_previous %}
+        <a class="page-link"
+           href="{% relative_url objetos.previous_page_number 'pagina' request.GET.urlencode %}">
+          Anterior
+        </a>
+      {% endif %}
+
+      {% if objetos.has_next %}
+        <a class="page-link"
+           href="{% relative_url objetos.next_page_number 'pagina' request.GET.urlencode %}">
+          Siguiente
+        </a>
+      {% endif %}
+
+    </nav>
+  </div>
+</div>
+
+{% endblock %}

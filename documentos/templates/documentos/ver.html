@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+  DOCIA · Documento
+{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado -->
+<div class="docia-section-header">
+  <h3>{{ documento.tipo_doc }}</h3>
+  <p>
+    Detalle del documento y metadatos asociados.
+  </p>
+</div>
+
+<!-- Acciones -->
+<div class="mb-4 d-flex gap-3 flex-wrap">
+
+  <a href="javascript:history.back()" class="docia-link">
+    <i class="bi bi-arrow-left"></i>
+    <span>Volver</span>
+  </a>
+
+  {% if perms.documentos.change_documento %}
+    <a href="{% url 'editar_documento' documento.id %}"
+       class="docia-link docia-primary">
+      <i class="bi bi-pencil"></i>
+      <span>Editar</span>
+    </a>
+  {% endif %}
+
+  {% if perms.documentos.delete_documento %}
+    <form action="{% url 'eliminar_documento' documento.id %}"
+          method="post"
+          onsubmit="return confirm('¿Seguro que desea eliminar este documento?');">
+      {% csrf_token %}
+      <button type="submit" class="docia-link text-danger border-0 bg-transparent">
+        <i class="bi bi-trash"></i>
+        <span>Eliminar</span>
+      </button>
+    </form>
+  {% endif %}
+
+  
+
+</div>
+
+<div class="docia-divider my-4"></div>
+
+<!-- Contenido -->
+<div class="row">
+
+  <!-- Columna izquierda: metadatos -->
+  <div class="col-xl-4 col-lg-5 mb-4">
+    <div class="card docia-doc-card h-100">
+
+      <div class="card-body">
+
+        <h6 class="mb-3">Información general</h6>
+
+        <dl class="row mb-0 docia-meta-list">
+
+          <dt class="col-6">Fecha del documento</dt>
+          <dd class="col-6">{{ documento.fecha_informe|default_if_none:"—" }}</dd>
+
+          <dt class="col-6">Área / Departamento</dt>
+          <dd class="col-6">{{ documento.dependencia|default_if_none:"—" }}</dd>
+
+          <dt class="col-6">Texto extraído</dt>
+          <dd class="col-6">
+            {% if documento.texto_extraido %}Sí{% else %}No{% endif %}
+          </dd>
+
+          <dt class="col-6">Leído por IA</dt>
+          <dd class="col-6">
+            {% if documento.leido_por_ia %}Sí{% else %}No{% endif %}
+          </dd>
+
+          <dt class="col-6">Creado por</dt>
+          <dd class="col-6">{{ documento.creada_por|default_if_none:"—" }}</dd>
+
+          <dt class="col-6">Fecha de ingreso</dt>
+          <dd class="col-6">{{ documento.fecha_ingresada|default_if_none:"—" }}</dd>
+
+        </dl>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna derecha: contenido -->
+  <div class="col-xl-8 col-lg-7 mb-4">
+    <div class="card docia-doc-card h-100">
+
+      <div class="card-body">
+
+        <h6>Asunto</h6>
+        <p class="mb-4">
+          {{ documento.asunto|default_if_none:"—" }}
+        </p>
+
+        {% if documento.descripcion %}
+          <h6>Descripción</h6>
+          <p class="mb-4">
+            {{ documento.descripcion }}
+          </p>
+        {% endif %}
+
+        <h6>Archivos</h6>
+
+        <ul class="list-unstyled">
+
+          <li class="mb-2">
+            <i class="bi bi-file-earmark-pdf me-2"></i>
+            <a href="{{ documento.informe.url }}" target="_blank">
+              Ver informe
+            </a>
+          </li>
+
+          {% if documento.informe_editable %}
+            <li>
+              <i class="bi bi-file-earmark-text me-2"></i>
+              <a href="{{ documento.informe_editable.url }}" target="_blank">
+                Versión editable
+              </a>
+            </li>
+          {% endif %}
+
+        </ul>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends  'login.html' %}
+{% block contenido %}
+
+
+    <form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+        <div class="mb-1 p-3 text-left">
+        {{ form.username.label_tag }} <br>
+        {{ form.username }}
+        </div>
+        <div class="mb-1 p-3 text-left">
+        {{ form.password.label_tag }}<br>
+        {{ form.password }}
+            </div>
+        <div class="mb-1 p-3 text-center">
+          <input type="submit" value="Ingresar">
+    <input type="hidden" name="next" value="{{ next }}">
+          </div>
+    <div class="mb-1 p-3 text-center">
+         <a href="{% url 'password_reset' %}"> Olvidé la contraseña </a>
+
+          </div>
+    
+  </form>
+
+{% endblock %}

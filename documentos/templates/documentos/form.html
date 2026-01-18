@@ -1,0 +1,110 @@
+<div class="row">
+  <div class="col-12">
+    {{ form.errors }}
+    {{ form2.errors }}
+  </div>
+</div>
+
+<form method="POST"
+      enctype="multipart/form-data"
+      class="docia-form">
+
+  {% csrf_token %}
+
+  <!-- Sección: Clasificación -->
+  <div class="docia-form-section">
+    <h6>Clasificación del documento</h6>
+
+    <div class="row">
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label {{ form.dependencia.field.required }}">
+          {{ form.dependencia.label }}
+        </label>
+        {{ form.dependencia }}
+        <small class="text-muted">{{ form.dependencia.errors }}</small>
+      </div>
+
+      <div class="col-md-4 mb-3">
+        <label class="form-label {{ form.tipo_doc.field.required }}">
+          {{ form.tipo_doc.label }}
+        </label>
+        {{ form.tipo_doc }}
+        <small class="text-muted">{{ form.tipo_doc.errors }}</small>
+      </div>
+
+      <div class="col-md-2 mb-3">
+        <label class="form-label {{ form.fecha_informe.field.required }}">
+          {{ form.fecha_informe.label }}
+        </label>
+        {{ form.fecha_informe }}
+        <small class="text-muted">{{ form.fecha_informe.errors }}</small>
+      </div>
+
+      <div class="col-md-2 mb-3">
+        <label class="form-label">
+          {{ form.leido_por_ia.label }}
+        </label>
+        <div class="form-check form-switch">
+          {{ form.leido_por_ia }}
+        </div>
+        <small class="text-muted">{{ form.leido_por_ia.errors }}</small>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Sección: Identificación -->
+  <div class="docia-form-section">
+    <h6>Identificación</h6>
+
+    <div class="mb-3">
+      <label class="form-label {{ form.asunto.field.required }}">
+        {{ form.asunto.label }}
+      </label>
+      {{ form.asunto }}
+      <small class="text-muted">{{ form.asunto.errors }}</small>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">
+        {{ form.descripcion.label }}
+      </label>
+      {{ form.descripcion }}
+      <small class="text-muted">{{ form.descripcion.errors }}</small>
+    </div>
+  </div>
+
+  <!-- Sección: Archivos -->
+  <div class="docia-form-section">
+    <h6>Archivos</h6>
+
+    <div class="row">
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label {{ form.informe.field.required }}">
+          {{ form.informe.label }}
+        </label>
+        {{ form.informe }}
+        <small class="text-muted">{{ form.informe.errors }}</small>
+      </div>
+
+      <div class="col-md-6 mb-3">
+        <label class="form-label">
+          {{ form.informe_editable.label }}
+        </label>
+        {{ form.informe_editable }}
+        <small class="text-muted">{{ form.informe_editable.errors }}</small>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Acciones -->
+  <div class="docia-form-actions">
+    <button type="submit" class="btn btn-primary">
+      Guardar documento
+    </button>
+  </div>
+
+</form>

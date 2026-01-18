@@ -1,0 +1,909 @@
+{% extends "base.html" %}
+
+{% block titulo %} INICIO {% endblock %}
+
+{% block contenido %}
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+    <div class="page-header text-center">
+        {% if hay_filtros %}
+            <h3>Resultados filtrados</h3>
+        {% else %}
+            <h3>{{ user.dependencia.unidad.sigla }} <br><small>DATOS {{ anio }}</small></h3>
+    {% endif %}
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3">
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Filtrar</button>
+
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">FILTRAR EVENTOS</h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+        <form method="GET" class="col-xs-12">
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row">
+                {# Ejemplo: un campo #}
+                <div class="col-12 mb-3">
+                  <label class="mb-0">{{ filtro.form.titulo.label }}</label>
+                  {{ filtro.form.titulo }}
+                  <small class="text-muted">{{ filtro.form.titulo.errors }}</small>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.sgsp.label }}</label>
+                  {{ filtro.form.sgsp }}
+                  <small class="text-muted">{{ filtro.form.sgsp.errors }}</small>
+                </div>
+
+                <div class="col-xs-5 col-sm-5 col-md-4 col-lg-4 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.tentativa.label }}</label>
+                  {{ filtro.form.tentativa }}
+                  <small class="text-muted">{{ filtro.form.tentativa.errors }}</small>
+                </div>
+
+                <div class="col-xs-5 col-sm-3 col-md-3 col-lg-3 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.legitima_defensa.label }}</label>
+                  {{ filtro.form.legitima_defensa }}
+                  <small class="text-muted">{{ filtro.form.legitima_defensa.errors }}</small>
+                </div>
+
+                <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.estado.label }}</label>
+                  {{ filtro.form.estado }}
+                  <small class="text-muted">{{ filtro.form.estado.errors }}</small>
+                </div>
+
+                <div class="col-12 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.unidad_actual.label }}</label>
+                  {{ filtro.form.unidad_actual }}
+                  <small class="text-muted">{{ filtro.form.unidad_actual.errors }}</small>
+                </div>
+
+                <div class="col-12 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.dependencia_actual.label }}</label>
+                  {{ filtro.form.dependencia_actual }}
+                  <small class="text-muted">{{ filtro.form.dependencia_actual.errors }}</small>
+                </div>
+
+                <div class="col-12 mb-3">
+                  <label for="" class="mb-0">{{ filtro.form.fiscalias.label }}</label>
+                  {{ filtro.form.fiscalias }}
+                  <small class="text-muted">{{ filtro.form.fiscalias.errors }}</small>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-3">
+                  <label for="id_equipo" class="mb-0">{{ filtro.form.equipo.label }}</label>
+                  <select id="id_equipo" name="equipo" class="form-control">
+                    <option value="">---------</option>
+                  </select>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mb-3">
+                  <label for="" class="mb-0">Departamentos</label>
+                  {{ filtro.form.departamento }}
+                  <small class="text-muted">{{ filtro.form.departamento.errors }}</small>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 mb-3 formfecha">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <label for="" class="mb-0">{{ filtro.form.fecha_hecho.label }}</label>
+                  </div>
+
+                  {{ filtro.form.fecha_hecho }}
+                  <small class="text-muted">{{ filtro.form.fecha_hecho.errors }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button class="btn btn-primary" type="submit" value="Buscar">Filtrar</button>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+
+
+                        <!-- Earnings (Monthly) Card Example -->
+                        <div class="col-sm-12 col-xl-3 col-md-4 mb-3">
+                            <div class="card border-left-primary h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-primary text-uppercase mb-1">
+                                                Cant. eventos</div>
+                                            <div class="h5 mb-0">{{ cant_novedades }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div class="col-sm-12 col-xl-3 col-md-4 mb-3">
+                            <div class="card border-left-primary h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-primary text-uppercase mb-1">
+                                                Promedio de días hasta aclaración</div>
+                                            <div class="h5 mb-0">{{ promedio_dias }} días</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-xl-3 col-md-4 mb-3">
+                            <div class="card border-left-success h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-success text-uppercase mb-1">Cant. Eventos Aclarados
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_aclaradas }} ({{ cant_aclaradas_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-success" role="progressbar"
+                                                            style="width: {{ cant_aclaradas_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_aclaradas_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12 col-xl-3 col-md-4 mb-3">
+                            <div class="card border-left-danger h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-danger text-uppercase mb-1">Cant. Eventos NO Aclarados
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_no_aclaradas }} ({{ cant_no_aclaradas_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-danger" role="progressbar"
+                                                            style="width: {{ cant_no_aclaradas_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_no_aclaradas_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-2 col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-warning text-uppercase mb-1">Cant. Eventos Aclarados Policialmente
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_aclaradas_policialmente }} ({{ cant_aclaradas_policialmente_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: {{ cant_aclaradas_policialmente_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_aclaradas_policialmente_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-2 col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-warning text-uppercase mb-1">Cant. Eventos Aclarados Policialmente con Requerido
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_aclaradas_policialmente_con_requerido }} ({{ cant_aclaradas_policialmente_con_requerido_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: {{ cant_aclaradas_policialmente_con_requerido_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_aclaradas_policialmente_con_requerido_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-2 col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-warning text-uppercase mb-1">Cant. Eventos Con Avances
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_con_avances }} ({{ cant_con_avances_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: {{ cant_con_avances_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_con_avances_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-2 col-xl-3 col-md-6 mb-4">
+                            <div class="card border-left-warning h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs text-warning text-uppercase mb-1">Cant. Eventos Pendientes
+                                            </div>
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col-auto">
+                                                    <div class="h5 mb-0 mr-3">{{ cant_pendientes }} ({{ cant_pendientes_porcentaje|floatformat:2  }}%)</div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="progress progress-sm mr-2">
+                                                        <div class="progress-bar bg-warning" role="progressbar"
+                                                            style="width: {{ cant_pendientes_porcentaje|floatformat:0 }}%" aria-valuenow="{{ cant_pendientes_porcentaje|floatformat:0 }}" aria-valuemin="0"
+                                                            aria-valuemax="100"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-folder fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Chart -->
+                       <!-- Área del gráfico -->
+                <div class="col-xl-6 col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h6 class="m-0 text-primary">Cantidad de eventos por mes</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-area">
+                                <canvas id="myAreaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+            <div class="col-xl-6 col-lg-6 mb-3">
+                <div class="card mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 text-primary">Cantidad de eventos por estado</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="miGraficoTorta"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+<script>
+   const ctx = document.getElementById('miGraficoTorta').getContext('2d');
+
+  var total = {{ cant_novedades|default:0 }};
+
+var porcentajes = [
+    "{{ cant_aclaradas_porcentaje|floatformat:2|safe }}".replace(",", ".") * 1 || 0,
+    "{{ cant_no_aclaradas_porcentaje|floatformat:2|safe }}".replace(",", ".") * 1 || 0
+];
+
+   const miGrafico = new Chart(ctx, {
+   type: 'pie',
+   data: {
+      labels: ['Aclaradas', 'No Aclaradas'],
+      datasets: [{
+         data: porcentajes,
+         backgroundColor: ['green', 'red']
+      }]
+   },
+   options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+               tooltip: {
+                   callbacks: {
+                       label: function(tooltipItem) {
+                           return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                       }
+                   }
+               }
+           },
+      animation: {
+         onComplete: function() {
+            const chartInstance = this.chart;
+            const ctx = chartInstance.ctx;
+            ctx.font = '14px Arial';
+            ctx.fillStyle = 'white'; // Color del texto en la torta
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            this.data.datasets.forEach((dataset, i) => {
+               let meta = chartInstance.getDatasetMeta(i);
+               meta.data.forEach((element, index) => {
+                  let data = dataset.data[index] + '%'; // Valor del segmento
+                  let position = element.tooltipPosition(); // Obtener la posición del texto
+                  ctx.fillText(data, position.x, position.y); // Dibujar el número en el gráfico
+               });
+            });
+         }
+      }
+   }
+});
+</script>
+
+<script type="text/javascript">
+
+ document.addEventListener("DOMContentLoaded", function() {
+
+ // Obtener datos desde Django y asegurarse de que sean arrays válidos en JavaScript
+var meses = JSON.parse('{{ meses|safe }}');
+var valores = JSON.parse('{{ valores|safe }}');
+
+// Configuración global de Chart.js
+Chart.defaults.color = '#858796';
+
+     var ctx = document.getElementById("myAreaChart").getContext("2d");
+    var myLineChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: meses,
+            datasets: [{
+                label: "Cantidad de eventos",
+                lineTension: 0,
+                backgroundColor: "rgba(0, 123, 255, 0.8)",
+                borderColor: "rgba(78, 115, 223, 1)",
+                pointRadius: 5,
+                pointBackgroundColor: "white",
+                pointBorderColor: "rgba(78, 115, 223, 1)",
+                pointHoverRadius: 6,
+                pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                pointHitRadius: 10,
+                pointBorderWidth: 2,
+                data: valores.map(v => Math.round(v)), // 🔹 Asegurar que solo haya enteros
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+   x: { grid: { display: true }, ticks: { maxTicksLimit: meses.length } },
+   y: {
+      beginAtZero: true,
+      stepSize: 1,
+      ticks: {
+          callback: function(value) {
+              return Number.isInteger(value) ? value : null;
+          }
+      }
+   }
+},
+            legend: { display: false },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return "Cantidad: " + Math.round(tooltipItem.yLabel);  // 🔹 Muestra solo enteros en tooltip
+                    }
+                }
+            }
+        }
+    });
+});
+
+
+
+
+</script>
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+                <div class="card mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 text-primary">Eventos por día de la semana</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="graficoSemana"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+                <div class="card mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 text-primary">Eventos por hora</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="graficoHoras"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+                <div class="card mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 text-primary">Eventos por día del mes</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="graficoDiaMes"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var labels = JSON.parse('{{ dias_mes_labels|safe }}');
+  var valores = JSON.parse('{{ dias_mes_valores|safe }}');
+
+  const ctxDiaMes = document.getElementById('graficoDiaMes').getContext('2d');
+  new Chart(ctxDiaMes, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Eventos por día del mes',
+        data: valores,
+        borderColor: "rgba(78, 115, 223, 1)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+                
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var labels = JSON.parse('{{ horas_labels|safe }}');
+  var valores = JSON.parse('{{ horas_valores|safe }}');
+
+  const ctxHoras = document.getElementById('graficoHoras').getContext('2d');
+  new Chart(ctxHoras, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Eventos por hora',
+        data: valores,
+        backgroundColor: "rgba(0, 123, 255, 0.8)",
+        borderColor: "rgba(78, 115, 223, 1)",
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  var labels = JSON.parse('{{ dias_labels|safe }}');
+  var valores = JSON.parse('{{ dias_valores|safe }}');
+
+  const ctxSemana = document.getElementById('graficoSemana').getContext('2d');
+  new Chart(ctxSemana, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Cantidad de eventos',
+        data: valores,
+        backgroundColor: "rgba(0, 123, 255, 0.8)",
+        borderColor: "rgba(78, 115, 223, 1)",
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            stepSize: 1,
+            precision: 0
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+
+                         
+
+
+
+
+<div class="col-sm-12 col-md-6 col-lg-6">
+  <div class="card  mb-4">
+    <div class="card-header text-primary">Tipos de eventos más frecuentes</div>
+    <div class="card-body">
+      <canvas id="graficoTitulos"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header text-primary">
+                        <h6 class="m-0 text-primary">Evolución de casos aclarados</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="chartAclaradosMes"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+  <div class="card  mb-4">
+    <div class="card-header text-primary">Dependencias con más casos aclarados</div>
+    <div class="card-body">
+      <canvas id="graficoDependencias"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+  <div class="card  mb-4">
+    <div class="card-header text-primary">Top 10 por Jurisdicción</div>
+    <div class="card-body">
+      <canvas id="chartJurisdiccion"></canvas>
+    </div>
+  </div>
+</div>
+
+
+            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+  <div class="card  mb-4">
+    <div class="card-header text-primary">Top 10 por Barrio</div>
+    <div class="card-body">
+      <canvas id="chartBarrio"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+<script>
+const colorBase = "rgba(0, 123, 255, 0.8)";
+const colorBorde = "rgba(78, 115, 223, 1)";
+
+new Chart(document.getElementById('chartJurisdiccion'), {
+  type: 'bar',
+  data: {
+    labels: {{ juris_labels|safe }},
+    datasets: [{
+      label: 'Eventos',
+      data: {{ juris_valores|safe }},
+      backgroundColor: colorBase,
+      borderColor: colorBorde,
+      borderWidth: 1
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('chartBarrio'), {
+  type: 'bar',
+  data: {
+    labels: {{ barrio_labels|safe }},
+    datasets: [{
+      label: 'Eventos',
+      data: {{ barrio_valores|safe }},
+      backgroundColor: colorBase,
+      borderColor: colorBorde,
+      borderWidth: 1
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <div class="col-sm-12 col-md-6 col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 text-primary">Georreferenciación de los eventos</h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 m-0 p-0">
+                                            <div id="miMapa" style="height: 400px;">
+
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+<script>
+const ctxDep = document.getElementById("graficoDependencias");
+new Chart(ctxDep, {
+  type: "bar",
+  data: {
+    labels: {{ dep_labels|safe }},
+    datasets: [{
+      label: "Casos aclarados",
+      data: {{ dep_valores|safe }},
+      backgroundColor:"rgba(0, 123, 255, 0.8)",
+      borderColor: "rgba(0, 123, 255, 0.8)",
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: { indexAxis: 'y', responsive: true }
+});
+</script>
+
+
+
+
+<script>
+const ctxTitulos = document.getElementById("graficoTitulos");
+new Chart(ctxTitulos, {
+  type: "bar",
+  data: {
+    labels: {{ titulos_labels|safe }},
+    datasets: [{
+      label: "Cantidad",
+      data: {{ titulos_valores|safe }},
+      backgroundColor: "rgba(0, 123, 255, 0.8)",
+    }]
+  },
+  options: { indexAxis: 'y', responsive: true }
+});
+</script>
+
+<script>
+const ctxAclarados = document.getElementById("chartAclaradosMes");
+new Chart(ctxAclarados, {
+    type: "line",
+    data: {
+        labels: {{ aclarados_labels|safe }},
+        datasets: [{
+            label: "Casos aclarados",
+            data: {{ aclarados_valores|safe }},
+            borderWidth: 2,
+            borderColor: "rgba(78, 115, 223, 1)",
+            fill: true,
+            tension: 0.3
+        }]
+    },
+    options: { indexAxis: 'y', responsive: true }
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
+
+
+
+<style>
+.seccional-label {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    border: 1px solid #ccc;
+}
+</style>
+
+
+
+
+<script>
+  // Crear mapa base
+  const { map, capaBase } = crearMapa("miMapa", {
+    lat: -34.9011,
+    lng: -56.1645,
+    zoom: 12,
+    tipoBase: "OSM"  // podés usar "ESRI" o "MI"
+  });
+
+  // Crear cluster
+  const markersCluster = crearCluster();
+
+
+  // 📌 Resto de novedades
+  {% for nov in novedades %}
+    agregarMarcadorCluster(markersCluster,
+      parseFloat("{{ nov.geom.y }}".replace(",", ".")),
+      parseFloat("{{ nov.geom.x }}".replace(",", ".")),
+      `
+        <a href="{% url "ver_evento" nov.id %}">
+          <strong>SGSP: {{ nov.sgsp }} - {{ nov.titulo }}</strong>
+        </a><br>
+        Fecha hecho: {{ nov.fecha_hecho|date:"d/m/Y H:i" }}<br>
+        Estado: <strong>{{ nov.estado }}</strong>
+      `,
+      "/static/img/iazul.png"
+    );
+  {% endfor %}
+
+  // Agregar cluster al mapa
+  map.addLayer(markersCluster);
+
+  // 📍 Cargar seccionales
+  cargarGeoJSON(
+    map,
+    "/static/geojson/seccionales.json",
+    { color: "blue", weight: 2, fillOpacity: 0.05 },
+    (f) => `<strong>Seccional N.º ${f.properties.SECCION}</strong> - ${f.properties.DEPARTAMEN}`,
+    (f) => `N.º ${f.properties.SECCION}`
+  );
+
+  // Ajustar vista
+  setTimeout(() => {
+    if (markersCluster.getLayers().length > 0) {
+      map.fitBounds(markersCluster.getBounds());
+    }
+  }, 1000);
+</script>
+
+
+
+
+                    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

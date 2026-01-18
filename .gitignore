@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# Virtual env
+venv/
+.env/
+.venv/
+
+# IA / modelos
+modelos_ia/
+*.gguf
+
+# FAISS / embeddings
+*.index
+*.faiss
+*.npy
+fragmentos_guardados.npy
+
+# Logs
+*.log
+
+# VS Code
+.vscode/

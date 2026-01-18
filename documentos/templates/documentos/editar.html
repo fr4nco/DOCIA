@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block titulo %}DOCIA · Editar documento{% endblock %}
+
+{% block contenido %}
+
+<!-- Encabezado -->
+<div class="docia-section-header">
+  <h3>Editar documento</h3>
+  <p>
+    Modifique la información del documento registrado en el sistema.
+  </p>
+</div>
+
+<!-- Acciones -->
+<div class="mb-4 d-flex gap-3 flex-wrap">
+  <a href="javascript:history.back()" class="docia-link">
+    <i class="bi bi-arrow-left"></i>
+    <span>Volver</span>
+  </a>
+</div>
+
+<!-- Mensajes -->
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<!-- Formulario -->
+<div class="row justify-content-center">
+
+    <p class="text-muted mb-3 True">
+  <span class="text-primary True fw-semibold">*</span> Campos obligatorios
+</p>
+
+  <div class="col-xl-9 col-lg-10">
+
+    <div class="card docia-doc-card">
+      <div class="card-body">
+
+        {% include "documentos/form.html" %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

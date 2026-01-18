@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+
+    <title>{% block titulo %}Reporte{% endblock %}</title>
+
+    <style>
+        /* =========================
+           CONFIGURACIÓN GENERAL
+        ========================== */
+        @page {
+            size: A4;
+            margin: 2.5cm;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12pt;
+            color: #000;
+            background: #fff;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        /* =========================
+           ENCABEZADO
+        ========================== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            height: 70px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 16pt;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        .header h2 {
+            font-size: 13pt;
+            margin: 5px 0 0 0;
+            font-weight: normal;
+        }
+
+        /* =========================
+           CONTENIDO
+        ========================== */
+        .contenido {
+            width: 100%;
+        }
+
+        h3 {
+            font-size: 13pt;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 3px;
+        }
+
+        p {
+            margin: 0 0 10px 0;
+        }
+
+        ul {
+            margin-left: 20px;
+        }
+
+        /* =========================
+           TABLAS
+        ========================== */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #000;
+            padding: 6px;
+            font-size: 11pt;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* =========================
+           PIE DE PÁGINA
+        ========================== */
+        footer {
+            position: fixed;
+            bottom: 1.5cm;
+            left: 2.5cm;
+            right: 2.5cm;
+            font-size: 10pt;
+            text-align: center;
+        }
+
+        .page-number:after {
+            content: counter(page);
+        }
+
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 12pt;
+  }
+
+  .up {
+    color: #842029; /* rojo sobrio */
+    font-weight: bold;
+  }
+
+  .down {
+    color: #0f5132; /* verde sobrio */
+    font-weight: bold;
+  }
+
+  .neutral {
+    color: #6c757d;
+    font-weight: bold;
+  }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <div class="header">
+        <!-- Si querés logo -->
+        <!-- <img src="{% static 'img/logo_mi.png' %}" alt="Logo"> -->
+
+        <h1>MINISTERIO DEL INTERIOR</h1>
+    </div>
+
+    <!-- CONTENIDO -->
+    <div class="contenido">
+        {% block contenido %}
+        {% endblock %}
+    </div>
+
+
+
+</body>
+</html>
