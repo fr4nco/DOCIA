@@ -1,30 +1,61 @@
 # DOCIA
-Sistema para análisis y búsqueda inteligente de documentos mediante IA utilizando búsqueda semántica y recuperación de información (RAG).
 
-## 🚀 Funcionalidades
-- Carga y procesamiento de documentos PDF con texto embebido
-- Extracción y normalización de texto
-- Búsqueda semántica mediante embeddings
-- Recuperación de información basada en documentos (RAG)
-- Control de acceso y trazabilidad
+DOCIA es una aplicación web para **análisis y consulta inteligente de documentos**  
+orientada a entornos cerrados, con foco en **trazabilidad, seguridad y fidelidad de respuesta**.
 
-## 🧠 Arquitectura
-- Backend: Django
-- Base de datos: PostgreSQL
-- Vector store: FAISS
-- NLP / LLM: modelos locales
-- Frontend: HTML, CSS, JavaScript
+Este proyecto implementa un flujo de *Recuperación Aumentada por Generación (RAG)* usando:
+- extracción de texto desde PDFs,
+- indexación semántica con FAISS,
+- recuperación de fragmentos relevantes,
+- generación de respuestas con modelos de lenguaje locales (LLMs),
+- y limpieza/control de salida para evitar alucinaciones.
 
-## 🔐 Seguridad
-Este repositorio contiene una versión demostrativa.
-No incluye datos reales ni configuraciones sensibles.
+---
 
-## 🛠️ Instalación (modo demo)
-1. Clonar repositorio
-2. Crear entorno virtual
-3. Instalar dependencias
-4. Ejecutar migraciones
-5. Cargar documentos de ejemplo
+## 🧩 ¿Qué problema resuelve?
 
-## 📌 Estado del proyecto
-Prototipo funcional / demo técnica
+Cuando se trabaja con documentos extensos o sensibles, las personas necesitan:
+- encontrar información relevante
+- obtener respuestas en lenguaje natural
+- sin exponer datos a servicios externos
+- manteniendo trazabilidad y control
+
+DOCIA permite esto sin depender de la nube.
+
+---
+
+## 🚀 Arquitectura general
+
+1. **Carga de documento PDF**
+2. **Extracción de texto**
+3. **Indexación semántica** (FAISS)
+4. **Recuperación de contexto relevante**
+5. **Generación de respuestas con LLM local**
+6. **Post-procesado y limpieza de salida**
+
+---
+
+## 🛠️ Tecnologías usadas
+
+- Python
+- Django
+- PostgreSQL
+- FAISS
+- Modelos de lenguaje locales (GGUF, LLaMA, Mistral, etc.)
+- Frontend básico con templates Django
+
+> *Modelos no incluidos*
+
+---
+
+## 📦 Estructura del proyecto
+
+DOCIA/
+├── docia/
+├── core/
+├── documentos/
+├── media/               
+├── modelos_ia/          
+├── static/
+├── templates/
+├── manage.py
